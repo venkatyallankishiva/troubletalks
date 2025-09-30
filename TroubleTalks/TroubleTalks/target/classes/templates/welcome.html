@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome - TroubleTalks</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: url('/images/backgroundLogo.png') no-repeat center center fixed; /* Ensure this path is correct */
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .container {
+            width: 500px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 60px 50px;
+            border-radius: 18px;
+            box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            max-width: 95%;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 25px;
+            position: relative;
+            /* Adjust height if necessary to prevent clipping a larger logo */
+            height: 120px; /* Increased from 100px */
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: moveLogo 2.5s ease forwards;
+        }
+
+        .logo {
+            /* --- MODIFIED --- */
+            /* Increased size of the logo */
+            width: 100px; /* Increased from 85px */
+            height: 100px; /* Increased from 85px */
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .brand {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+            margin-left: 15px;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 3px solid #333;
+            width: 0;
+            animation: typing 2s steps(12) forwards, blink 0.7s infinite;
+            animation-delay: 2.6s;
+            opacity: 1;
+        }
+
+        @keyframes moveLogo {
+            0% { left: 50%; transform: translateX(-50%); }
+            100% { left: 15%; transform: translateX(0); }
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 200px; }
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-top: 80px;
+            color: #333;
+        }
+
+        p {
+            font-size: 17px;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .buttons {
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column; /* Stack buttons vertically for better focus */
+            gap: 15px;
+        }
+
+        /* Primary Action: Explore and Create */
+        .buttons .primary-action {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .buttons a {
+            flex-grow: 1;
+            padding: 12px 20px;
+            background: rgba(26, 71, 42, 0.9);
+            color: #fff;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 12px;
+            box-shadow: 0px 4px 14px rgba(0,0,0,0.25);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        /* Highlight the Create Post button */
+        .buttons a.create-post {
+            background: #e6a75d; /* A warmer, attention-grabbing color */
+            color: #1a472a;
+        }
+
+        .buttons a:hover {
+            background: rgba(45, 93, 54, 1);
+            transform: scale(1.07);
+        }
+
+        .buttons a.create-post:hover {
+            background: #d4954a;
+        }
+
+        /* Logout button style */
+        .buttons a.logout {
+             background: #777;
+             max-width: 150px;
+             align-self: center;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="logo-wrapper">
+        <div class="logo-container">
+            <img th:src="@{/images/TroubleTalksLogo.jpeg}" alt="TroubleTalks Logo" class="logo">
+            <span class="brand">TroubleTalks</span>
+        </div>
+    </div>
+
+    <h2>Welcome, <span th:text="${user.username}">User</span> 👋</h2>
+    <p>Your email: <span th:text="${user.email}">email@example.com</span></p>
+
+    <div class="buttons">
+        <div class="primary-action">
+            <a th:href="@{/explore}">Explore Posts</a>
+            <a th:href="@{/new-post}" class="create-post">➕ Create a Post</a>
+        </div>
+        <a th:href="@{/profile}">My Profile</a>
+        <a th:href="@{/logout}" class="logout">Logout</a>
+    </div>
+</div>
+
+</body>
+</html>
