@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Post - TroubleTalks</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            background: #fdfcfb;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0px 15px 40px rgba(0,0,0,0.3);
+            width: 700px;
+            max-width: 95%;
+            margin-top: 50px;
+        }
+
+        h2 {
+            color: #1a472a;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 32px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            color: #333;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], textarea, select, input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .hint {
+            font-size: 14px;
+            color: #666;
+            margin-top: -15px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .buttons button, .buttons a {
+            flex-grow: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0px 4px 14px rgba(0,0,0,0.25);
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+        }
+
+        .buttons button.save {
+            background: #e6a75d;
+            color: #1a472a;
+        }
+        .buttons button.save:hover {
+            background: #d4954a;
+            transform: scale(1.02);
+        }
+
+        .buttons a.cancel {
+            background: #777;
+            color: #fdfcfb;
+        }
+        .buttons a.cancel:hover {
+            background: #555;
+            transform: scale(1.02);
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 th:text="|Editing: ${post.title}|">Editing: Post Title</h2>
+    <a th:href="@{/post/{id}(id=${post.id})}" style="font-size: 14px; display: block; margin-bottom: 20px;">← Back to Post View</a>
+
+    <form th:action="@{/post/{id}/edit(id=${post.id})}" th:object="${post}" method="post" enctype="multipart/form-data">
+
+        <label for="title">1. The Problem/Error (Title)</label>
+        <input type="text" id="title" th:field="*{title}" placeholder="A concise, searchable title..." required maxlength="150">
+        <span class="hint">Keep it clear and specific (max 150 chars).</span>
+
+        <label for="category">2. Category</label>
+        <select id="category" th:field="*{category}" required>
+            <option th:value="'Coding'" th:selected="${post.category == 'Coding'}">Coding / Tech</option>
+            <option th:value="'DIY'" th:selected="${post.category == 'DIY'}">DIY / Home Improvement</option>
+            <option th:value="'Health'" th:selected="${post.category == 'Health'}">Health / Wellness</option>
+            <option th:value="'Finance'" th:selected="${post.category == 'Finance'}">Finance / Budgeting</option>
+            <option th:value="'Life Hacks'" th:selected="${post.category == 'Life Hacks'}">Life Hacks / Productivity</option>
+            <option th:value="'Other'" th:selected="${post.category == 'Other'}">Other / General</option>
+        </select>
+        <span class="hint">Helps others find your solution faster.</span>
+
+        <div th:if="${post.fileName != null and !post.fileName.isEmpty()}" style="margin-bottom: 10px;">
+            <label>Current Attachment:</label>
+            <img th:src="${post.fileName}" alt="Current Attachment" style="max-width: 200px; display: block; margin-bottom: 5px;">
+            <span class="hint">Upload a new file below to replace it.</span>
+        </div>
+
+        <label for="file">3. Replace Attachment (Optional)</label>
+        <input type="file" id="file" name="file" accept="image/*,video/*">
+        <span class="hint">Select a file to replace the existing attachment (or to add one).</span>
+
+
+        <label for="journey">4. The Journey (Mistakes & Attempts)</label>
+        <textarea id="journey" th:field="*{journey}" placeholder="Detail everything you tried that *didn't* work. This saves others time!" required></textarea>
+        <span class="hint">List all the failed steps and attempts. This is the core 'shared experience.'</span>
+
+        <label for="solution">5. The Solution</label>
+        <textarea id="solution" th:field="*{solution}" placeholder="The exact, step-by-step process that finally resolved the problem." required></textarea>
+        <span class="hint">Provide clear instructions for the successful resolution.</span>
+
+        <label for="takeaway">6. Key Takeaway / Lesson Learned</label>
+        <input type="text" id="takeaway" th:field="*{takeaway}" placeholder="What is the single most important thing you learned?" required maxlength="300">
+        <span class="hint">A short, impactful sentence or two summarizing the core wisdom.</span>
+
+        <div class="buttons">
+            <button type="submit" class="save">Save Changes</button>
+            <a th:href="@{/post/{id}(id=${post.id})}" class="cancel">Cancel</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
