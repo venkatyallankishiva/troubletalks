@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${post.title} + ' | TroubleTalks'"></title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            min-height: 100vh;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* MAIN CONTAINER */
+        .container {
+            background: #ffffff;
+            padding: 60px 70px;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            width: 900px;
+            max-width: 95%;
+            margin: 40px 0;
+            border-top: 6px solid #0f4c5c;
+            transition: transform 0.2s ease;
+        }
+        .container:hover {
+            transform: translateY(-2px);
+        }
+
+        /* HEADER */
+        .logo-small {
+            display: block;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+        }
+        .header-meta {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 25px;
+        }
+        .header-meta h1 {
+            color: #0f4c5c;
+            font-size: 30px;
+            margin: 10px 0 6px;
+            font-weight: 800;
+        }
+        .category {
+            display: inline-block;
+            background: #facc15;
+            color: #111;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+        .tags-list {
+            margin-top: 12px;
+        }
+        .tags-list span {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #334155;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-right: 6px;
+            transition: background 0.2s ease;
+        }
+        .tags-list span:hover {
+            background: #e2e8f0;
+        }
+        .info {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 18px;
+        }
+
+        /* AUTHOR ACTIONS */
+        .author-actions {
+            text-align: right;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .author-actions a,
+        .author-actions button {
+            padding: 8px 20px;
+            font-weight: 600;
+            margin-left: 10px;
+            border-radius: 8px;
+            transition: all 0.25s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .author-actions a {
+            background: #0f4c5c;
+            color: #fff;
+        }
+        .author-actions a:hover {
+            background: #16697a;
+        }
+        .author-actions button {
+            background: #e11d48;
+            color: #fff;
+        }
+        .author-actions button:hover {
+            background: #be123c;
+        }
+
+        /* CONTENT SECTIONS */
+        .section {
+            margin-bottom: 30px;
+            padding: 25px 28px;
+            background: #f9fafb;
+            border-radius: 10px;
+            transition: box-shadow 0.2s ease;
+        }
+        .section:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+        }
+        .section h2 {
+            font-size: 20px;
+            color: #0f4c5c;
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-weight: 700;
+            border-bottom: 2px solid #facc15;
+            padding-bottom: 6px;
+        }
+        .section p {
+            font-size: 16px;
+            line-height: 1.65;
+            color: #374151;
+            white-space: pre-wrap;
+        }
+
+        /* TAKEAWAY */
+        .takeaway {
+            text-align: center;
+            background: #0f4c5c;
+            color: #f9fafb;
+            padding: 28px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 45px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        /* ATTACHMENTS */
+        .attachment-area {
+            margin: 35px 0;
+            padding: 20px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            background: #f8fafc;
+        }
+        .attachment-area img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .file-link-display {
+            background: #e2e8f0;
+            padding: 18px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .file-link-display span {
+            font-size: 26px;
+        }
+        .file-link-display a {
+            color: #0f4c5c;
+            text-decoration: none;
+            margin-left: 12px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .file-link-display a:hover {
+            text-decoration: underline;
+        }
+
+        /* INTERACTION BAR */
+        .interaction-bar {
+            border-top: 1px solid #cbd5e1;
+            border-bottom: 1px solid #cbd5e1;
+            padding: 15px 0;
+            margin: 25px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .like-button button {
+            padding: 8px 18px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .like-button button {
+            background: #facc15;
+            color: #111;
+        }
+        .like-button button:hover {
+            background: #fbbf24;
+        }
+        .like-button button.liked {
+            background: #0f4c5c;
+            color: #fff;
+        }
+
+        /* COMMENTS */
+        .comments-section {
+            margin-top: 35px;
+        }
+        .comments-section h2 {
+            border-bottom: 2px solid #facc15;
+            padding-bottom: 8px;
+            margin-bottom: 18px;
+        }
+        .comment-form textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            margin-bottom: 10px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 80px;
+        }
+        .comment-form button {
+            background: #0f4c5c;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .comment-form button:hover {
+            background: #16697a;
+        }
+        .comment-display {
+            background: #f9fafb;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        .comment-display span {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* BACK LINK */
+        .back-link {
+            display: inline-block;
+            margin-top: 35px;
+            padding: 12px 24px;
+            background: #334155;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: 0.25s ease;
+        }
+        .back-link:hover {
+            background: #1e293b;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-meta">
+        <img th:src="@{/images/TroubleTalksLogo.jpeg}" alt="TroubleTalks Logo" class="logo-small">
+
+        <h1 th:text="${post.title}">The Problem/Error Title</h1>
+
+        <span class="category" th:text="${post.category}">Category</span>
+
+        <div class="tags-list">
+            <span th:each="tag : ${post.tags}" th:text="${'#' + tag.name}">#tagname</span>
+        </div>
+
+        <div class="info">
+            Posted by <span th:text="${post.author.username}">User</span>
+            on <span th:text="${#temporals.format(post.postedAt, 'MMM dd, yyyy')}">Date</span>
+        </div>
+    </div>
+
+    <div th:if="${post.author.id == currentUserId}" class="author-actions">
+        <a th:href="@{/post/{id}/edit(id=${post.id})}">Edit Post</a>
+        <form th:action="@{/post/{id}/delete(id=${post.id})}" method="post" style="display: inline;"
+              onsubmit="return confirm('Are you sure you want to permanently delete this TroubleTalks story? This cannot be undone.');">
+            <button type="submit">Delete Post</button>
+        </form>
+    </div>
+
+    <!-- ✅ FIXED ATTACHMENT AREA -->
+    <div th:if="${post.fileName != null and !post.fileName.isEmpty()}" class="attachment-area">
+
+        <!-- Image Preview -->
+        <div th:if="${#strings.endsWith(post.fileName, '.jpg') or
+                     #strings.endsWith(post.fileName, '.jpeg') or
+                     #strings.endsWith(post.fileName, '.png') or
+                     #strings.endsWith(post.fileName, '.gif')}">
+            <img th:src="${post.fileName}" alt="TroubleTalks Image Attachment">
+        </div>
+
+        <!-- Other Documents -->
+        <div th:unless="${#strings.endsWith(post.fileName, '.jpg') or
+                         #strings.endsWith(post.fileName, '.jpeg') or
+                         #strings.endsWith(post.fileName, '.png') or
+                         #strings.endsWith(post.fileName, '.gif')}"
+             class="file-link-display">
+
+            <span style="font-size: 24px; vertical-align: middle;">📄</span>
+            <a th:href="${post.fileName}" target="_blank"
+               style="margin-left: 10px; font-size: 16px; font-weight: 600;">
+                View/Download Attached Document
+            </a>
+            <p style="font-size: 12px; color: #6b7280; margin: 5px 0 0;">
+                (File hosted securely on Cloudinary)
+            </p>
+        </div>
+    </div>
+
+    <div class="section journey-section">
+        <h2>1. The Journey (Mistakes & Attempts)</h2>
+        <p th:text="${post.journey}">Details about all the failed attempts...</p>
+    </div>
+
+    <div class="section solution-section">
+        <h2>2. The Solution</h2>
+        <p th:text="${post.solution}">The exact, step-by-step instructions...</p>
+    </div>
+
+    <div class="takeaway">
+        Key Takeaway: <span th:text="${post.takeaway}">Shared experience is the fastest teacher.</span>
+    </div>
+
+    <div class="interaction-bar">
+        <span style="font-size: 16px; color: #555;">👍 <strong th:text="${likeCount}">0</strong> Likes</span>
+
+        <div class="like-button">
+            <form th:if="${isLiked}" th:action="@{/post/{id}/unlike(id=${post.id})}" method="post">
+                <button type="submit" class="liked">Unlike</button>
+            </form>
+            <form th:unless="${isLiked}" th:action="@{/post/{id}/like(id=${post.id})}" method="post">
+                <button type="submit" class="like-action">Like This Solution</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="comments-section" id="comments">
+        <h2 th:text="|Comments (${comments.size()})|">Comments (0)</h2>
+
+        <form th:action="@{/post/comment}" th:object="${newComment}" method="post" class="comment-form">
+            <input type="hidden" name="postId" th:value="${post.id}" />
+            <textarea th:field="*{content}" placeholder="Add your constructive comment..." required></textarea>
+            <button type="submit">Post Comment</button>
+        </form>
+
+        <div th:each="comment : ${comments}" class="comment-display">
+            <p th:text="${comment.content}">This is a great solution!</p>
+            <span>
+                By <strong th:text="${comment.author.username}">Commenter</strong>
+                on <span th:text="${#temporals.format(comment.commentedAt, 'MMM dd, yyyy HH:mm')}">Date/Time</span>
+            </span>
+        </div>
+
+        <div th:if="${comments.isEmpty()}"
+             style="text-align: center; color: #777; padding: 20px; border: 1px dashed #ccc; border-radius: 8px;">
+            Be the first to comment and share your insights!
+        </div>
+    </div>
+
+    <a th:href="@{/explore}" class="back-link">← Back to Explore Posts</a>
+</div>
+
+</body>
+</html>
